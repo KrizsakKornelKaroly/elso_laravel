@@ -16,7 +16,8 @@ Content-Type: application/json
 {
     "title": "New Todo",
     "description": "Todo description",
-    "completed": false
+    "is_completed": false,
+    "user_id": 1
 }
 
 ### update an existing todo
@@ -27,7 +28,7 @@ Content-Type: application/json
 {
     "title": "Updated Todo",
     "description": "Updated description",
-    "completed": true
+    "is_completed": true
 }
 
 ### delete todo

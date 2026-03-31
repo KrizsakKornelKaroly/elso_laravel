@@ -1,0 +1,36 @@
+### get all users
+
+GET http://localhost:8000/api/users
+Content-Type: application/json
+
+### get one user
+
+GET http://localhost:8000/api/users/1
+Content-Type: application/json
+
+### create a new user
+
+POST http://localhost:8000/api/users
+Content-Type: application/json
+
+{
+    "name": "New User",
+    "email": "newuser@example.com",
+    "password": "password"
+}
+
+### update an existing user
+
+PATCH http://localhost:8000/api/users/1
+Content-Type: application/json
+
+{
+    "name": "Updated User",
+    "email": "updateduser@example.com",
+    "password": "newpassword"
+}
+
+### delete user
+
+DELETE http://localhost:8000/api/users/3
+Content-Type: application/json

@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UpdateTodoRequest;
 use App\Models\Todo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
 
 class TodoController extends Controller
@@ -14,7 +14,7 @@ class TodoController extends Controller
      */
     public function index()
     {
-        return response()->json(Todo::all(), Response::HTTP_OK);
+        return response()->json(Todo::with('user')->get(), Response::HTTP_OK);
     }
 
     /**
@@ -30,14 +30,19 @@ class TodoController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
             'description' => 'required|string|max:1000',
-            'completed' => 'required|boolean',
+            'is_completed' => 'required|boolean',
+            'user_id' => 'required|exists:users,id',
         ]);
 
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
         $todo = Todo::create($request->all());
-        return response()->json($todo, 201);
+        return response()->json($todo, Response::HTTP_CREATED);
     }
 
     /**
@@ -61,11 +66,16 @@ class TodoController extends Controller
      */
     public function update(Request $request, Todo $todo)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
             'description' => 'required|string|max:1000',
-            'completed' => 'required|boolean',
+            'is_completed' => 'required|boolean',
+            'user_id' => 'required|exists:users,id',
         ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
 
         $todo->update($request->all());
         return response()->json($todo, Response::HTTP_OK);
