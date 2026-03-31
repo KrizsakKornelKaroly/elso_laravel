@@ -1,0 +1,36 @@
+### get all todos
+
+GET http://localhost:8000/api/todos
+Content-Type: application/json
+
+### get one todo
+
+GET http://localhost:8000/api/todos/1
+Content-Type: application/json
+
+### create a new todo
+
+POST http://localhost:8000/api/todos
+Content-Type: application/json
+
+{
+    "title": "New Todo",
+    "description": "Todo description",
+    "completed": false
+}
+
+### update an existing todo
+
+PATCH http://localhost:8000/api/todos/1
+Content-Type: application/json
+
+{
+    "title": "Updated Todo",
+    "description": "Updated description",
+    "completed": true
+}
+
+### delete todo
+
+DELETE http://localhost:8000/api/todos/3
+Content-Type: application/json

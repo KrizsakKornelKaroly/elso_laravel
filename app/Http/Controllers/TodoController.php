@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Todo;
-use App\Http\Requests\StoreTodoRequest;
 use App\Http\Requests\UpdateTodoRequest;
+use App\Models\Todo;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class TodoController extends Controller
 {
@@ -13,7 +14,7 @@ class TodoController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json(Todo::all(), Response::HTTP_OK);
     }
 
     /**
@@ -27,9 +28,16 @@ class TodoController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreTodoRequest $request)
+    public function store(Request $request)
     {
-        //
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string|max:1000',
+            'completed' => 'required|boolean',
+        ]);
+
+        $todo = Todo::create($request->all());
+        return response()->json($todo, 201);
     }
 
     /**
@@ -37,7 +45,7 @@ class TodoController extends Controller
      */
     public function show(Todo $todo)
     {
-        //
+        return response()->json($todo, Response::HTTP_OK);
     }
 
     /**
@@ -51,9 +59,16 @@ class TodoController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateTodoRequest $request, Todo $todo)
+    public function update(Request $request, Todo $todo)
     {
-        //
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string|max:1000',
+            'completed' => 'required|boolean',
+        ]);
+
+        $todo->update($request->all());
+        return response()->json($todo, Response::HTTP_OK);
     }
 
     /**
@@ -61,6 +76,7 @@ class TodoController extends Controller
      */
     public function destroy(Todo $todo)
     {
-        //
+        $todo->delete();
+        return response()->json(['message' => 'Todo deleted successfully!'], Response::HTTP_OK);
     }
 }
